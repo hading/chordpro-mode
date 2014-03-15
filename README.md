@@ -24,11 +24,8 @@ in ~/.emacs.d).
 Then put something like this into your .emacs file (I use the .pro
 extension for such files):
 
-`
-(setq auto-mode-alist (cons '("\\.pro$" . chordpro-mode) auto-mode-alist))
-
-(autoload 'chordpro-mode "chordpro-mode")
-`
+    (setq auto-mode-alist (cons '("\\.pro$" . chordpro-mode) auto-mode-alist))
+    (autoload 'chordpro-mode "chordpro-mode")
 
 Now when you visit a .pro file you should automatically get chordpro-mode.
 
