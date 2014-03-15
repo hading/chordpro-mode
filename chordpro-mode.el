@@ -23,6 +23,18 @@ Special commands:
 (define-key chordpro-mode-map "\C-ch" 'chordpro-insert-chorus)
 (define-key chordpro-mode-map "\C-ct" 'chordpro-insert-title)
 (define-key chordpro-mode-map "\C-cs" 'chordpro-insert-subtitle)
+(define-key chordpro-mode-map [C-down-mouse-1] 'mouse-set-point)
+(define-key chordpro-mode-map [C-mouse-1] 'chordpro-kill-current-chord)
+(define-key chordpro-mode-map [C-down-mouse-2] 'mouse-set-point)
+(define-key chordpro-mode-map [C-mouse-2] 'yank)
+(define-key chordpro-mode-map [C-down-mouse-3] 'mouse-set-point)
+(define-key chordpro-mode-map [C-mouse-3] 'chordpro-kill-next-chord)
+(define-key chordpro-mode-map [S-down-mouse-1] 'mouse-set-point)
+(define-key chordpro-mode-map [S-mouse-1] 'chordpro-copy-current-chord)
+(define-key chordpro-mode-map [S-down-mouse-2] 'mouse-set-point)
+(define-key chordpro-mode-map [S-mouse-2] 'yank)
+(define-key chordpro-mode-map [S-down-mouse-3] 'mouse-set-point)
+(define-key chordpro-mode-map [S-mouse-3] 'chordpro-copy-next-chord)
 
 (defun chordpro-insert-chord (chord)
   "Prompt for and insert chord at point, performing some normalization."
