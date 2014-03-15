@@ -26,6 +26,7 @@ extension for such files):
 
 `
 (setq auto-mode-alist (cons '("\\.pro$" . chordpro-mode) auto-mode-alist))
+
 (autoload 'chordpro-mode "chordpro-mode")
 `
 
