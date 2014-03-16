@@ -35,8 +35,6 @@ Special commands:
 (define-key chordpro-mode-map [S-mouse-2] 'yank)
 (define-key chordpro-mode-map [S-down-mouse-3] 'mouse-set-point)
 (define-key chordpro-mode-map [S-mouse-3] 'chordpro-copy-next-chord)
-(define-key chordpro-mode-map [A-down-mouse-1] 'mouse-set-point)
-(define-key chordpro-mode-map [A-mouse-1] 'chordpro-insert-chord)
 
 (defun chordpro-insert-chord (chord)
   "Prompt for and insert chord at point, performing some normalization."

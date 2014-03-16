@@ -68,6 +68,5 @@ specific to this mode or standard emacs commands).
 * Shift-mouse-1 : Copies current chord
 * Shift-mouse-2 : Yanks last kill
 * Shift-mouse-3 : Copies next chord
-* Alt-mouse-1 : Inserts chord
 
 
