@@ -26,6 +26,8 @@ Special commands:
 (define-key chordpro-mode-map "\C-cs" 'chordpro-insert-subtitle)
 (define-key chordpro-mode-map "\C-cl" 'chordpro-choose-insert-chord)
 (define-key chordpro-mode-map "\C-cr" 'chordpro-choose-replace-current-chord)
+(define-key chordpro-mode-map "\C-\M-n" 'chordpro-current-chord-forward)
+(define-key chordpro-mode-map "\C-\M-p" 'chordpro-current-chord-backward)
 (define-key chordpro-mode-map [C-down-mouse-1] 'mouse-set-point)
 (define-key chordpro-mode-map [C-mouse-1] 'chordpro-kill-current-chord)
 (define-key chordpro-mode-map [C-down-mouse-2] 'mouse-set-point)
@@ -120,19 +122,19 @@ already in the document."
 (defun chordpro-kill-current-chord ()
   "Kill the chord surrounding the point, if there is one."
   (interactive)
-  (operate-on-current-chord 'kill-region))
+  (chordpro-operate-on-current-chord 'kill-region))
 
 (defun chordpro-delete-current-chord ()
   "Delete the chord surrounding the point, if there is one."
   (interactive)
-  (operate-on-current-chord 'delete-region))
+  (chordpro-operate-on-current-chord 'delete-region))
 
 (defun chordpro-copy-current-chord ()
   "Copy the chord surrounding the point, if there is one."
   (interactive)
-  (operate-on-current-chord 'copy-region-as-kill))
+  (chordpro-operate-on-current-chord 'copy-region-as-kill))
 
-(defun operate-on-current-chord (function)
+(defun chordpro-operate-on-current-chord (function)
   "Call a two argument function on the current chord, if it exists, with
 the start and end of the chord."
   (let ((current-position (point-marker)))
@@ -146,6 +148,42 @@ the start and end of the chord."
                     (if (and (<  start current-position)
                              (< current-position end))
                         (funcall function start end))))))))))
+
+(defun chordpro-current-chord-forward (n)
+  "Move the current chord forward n characters."
+  (interactive "*p")
+  (let ((current-position (point-marker))
+        (chord-offset (chordpro-position-in-current-chord)))
+    (set-marker-insertion-type current-position t)
+    (chordpro-operate-on-current-chord
+     (lambda (start end)
+       (kill-region start end)
+       (forward-char n)
+       (yank)))
+    ;;I have to assume there's a better way to do this, but this works
+    ;;Get back in the chord and then move to the offset
+    (if (> n 0)
+        (goto-char (+ current-position n 1))
+      (goto-char (- current-position (+ n 4))))
+    (chordpro-move-to-position-in-current-chord chord-offset)))
+     
+(defun chordpro-current-chord-backward (n)
+  "Move the current chord backward n characters."
+  (interactive "*p")
+  (chordpro-current-chord-forward (- n)))
+
+(defun chordpro-move-to-position-in-current-chord (n)
+  "Move to the nth character in the current chord."
+  (search-backward "[")
+  (forward-char n))
+
+(defun chordpro-position-in-current-chord ()
+  "Determine the offset inside the current chord."
+  (interactive)
+  (let ((current-position (point)))
+    (save-excursion
+      (search-backward "[")
+      (- current-position (point)))))
 
 (defun chordpro-insert-single-directive (text)
   (insert "{" text ": }\n")
