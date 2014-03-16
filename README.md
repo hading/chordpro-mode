@@ -14,7 +14,9 @@ existing chordpro mode, but this provides more operations.
 I'm still developing and experimenting with this, so as I go along I
 might decide that different mouse or keybindings work better and will
 probably provide more functionality as I see things that will make the
-work that I do easier.
+work that I do easier. There are some fairly obvious things left to do
+and I'll add them I need them. If you have any ideas feel free to
+create an issue (or even better do it and send a pull request).
 
 ## Installation ##
 
