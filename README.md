@@ -63,7 +63,7 @@ experiments. All of them have corresponding keyboard commands (whether
 specific to this mode or standard emacs commands).
 
 * Ctrl-mouse-1 : Kills current chord
-* Ctrl-mouse-2 : Yanks last kill
+* Ctrl-mouse-2 : Yanks last kill (this is prone to change, as you can typically do this with a normal mouse-2)
 * Ctrl-mouse-3 : Kills next chord
 * Shift-mouse-1 : Copies current chord
 * Shift-mouse-2 : Insert chord
