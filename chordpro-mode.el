@@ -32,13 +32,18 @@ Special commands:
 (define-key chordpro-mode-map [S-down-mouse-1] 'mouse-set-point)
 (define-key chordpro-mode-map [S-mouse-1] 'chordpro-copy-current-chord)
 (define-key chordpro-mode-map [S-down-mouse-2] 'mouse-set-point)
-(define-key chordpro-mode-map [S-mouse-2] 'yank)
+(define-key chordpro-mode-map [S-mouse-2] 'mouse-insert-chord)
 (define-key chordpro-mode-map [S-down-mouse-3] 'mouse-set-point)
 (define-key chordpro-mode-map [S-mouse-3] 'chordpro-copy-next-chord)
 
 (defun chordpro-insert-chord (chord)
   "Prompt for and insert chord at point, performing some normalization."
-  (interactive "MChord:")
+  (interactive "*MChord:")
+  (insert "[" (chordpro-normalize-chord chord) "]"))
+
+(defun mouse-insert-chord (event chord)
+  "Prompt for and insert chord at point, performing some normalization."
+  (interactive "@e\nMChord:")
   (insert "[" (chordpro-normalize-chord chord) "]"))
 
 (defun chordpro-normalize-chord (chord)

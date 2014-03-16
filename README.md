@@ -66,7 +66,7 @@ specific to this mode or standard emacs commands).
 * Ctrl-mouse-2 : Yanks last kill
 * Ctrl-mouse-3 : Kills next chord
 * Shift-mouse-1 : Copies current chord
-* Shift-mouse-2 : Yanks last kill
+* Shift-mouse-2 : Insert chord
 * Shift-mouse-3 : Copies next chord
 
 
