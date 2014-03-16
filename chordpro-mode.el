@@ -1,4 +1,5 @@
 (require 'derived)
+(require 'dropdown-list nil t)
 
 (defvar chordpro-font-lock-defaults
   '((("\\(\\[[^]]*\\]\\)" . font-lock-string-face)
@@ -23,16 +24,18 @@ Special commands:
 (define-key chordpro-mode-map "\C-ch" 'chordpro-insert-chorus)
 (define-key chordpro-mode-map "\C-ct" 'chordpro-insert-title)
 (define-key chordpro-mode-map "\C-cs" 'chordpro-insert-subtitle)
+(define-key chordpro-mode-map "\C-cl" 'chordpro-choose-insert-chord)
+(define-key chordpro-mode-map "\C-cr" 'chordpro-choose-replace-current-chord)
 (define-key chordpro-mode-map [C-down-mouse-1] 'mouse-set-point)
 (define-key chordpro-mode-map [C-mouse-1] 'chordpro-kill-current-chord)
 (define-key chordpro-mode-map [C-down-mouse-2] 'mouse-set-point)
-(define-key chordpro-mode-map [C-mouse-2] 'yank)
+(define-key chordpro-mode-map [C-mouse-2] 'chordpro-mouse-choose-insert-chord)
 (define-key chordpro-mode-map [C-down-mouse-3] 'mouse-set-point)
 (define-key chordpro-mode-map [C-mouse-3] 'chordpro-kill-next-chord)
 (define-key chordpro-mode-map [S-down-mouse-1] 'mouse-set-point)
 (define-key chordpro-mode-map [S-mouse-1] 'chordpro-copy-current-chord)
 (define-key chordpro-mode-map [S-down-mouse-2] 'mouse-set-point)
-(define-key chordpro-mode-map [S-mouse-2] 'mouse-insert-chord)
+(define-key chordpro-mode-map [S-mouse-2] 'chordpro-mouse-insert-chord)
 (define-key chordpro-mode-map [S-down-mouse-3] 'mouse-set-point)
 (define-key chordpro-mode-map [S-mouse-3] 'chordpro-copy-next-chord)
 
@@ -41,17 +44,60 @@ Special commands:
   (interactive "*MChord:")
   (insert "[" (chordpro-normalize-chord chord) "]"))
 
-(defun mouse-insert-chord (event chord)
+(defun chordpro-mouse-insert-chord (event chord)
   "Prompt for and insert chord at point, performing some normalization."
   (interactive "@e\nMChord:")
   (insert "[" (chordpro-normalize-chord chord) "]"))
+
+(defun chordpro-choose-insert-chord ()
+  "Insert a chord chosen from a dropdown menu that contains all chords
+already in the document."
+  (interactive)
+  (when (featurep 'dropdown-list)
+    (let* ((choices (chordpro-buffer-chord-list))
+           (selection (dropdown-list choices)))
+      (when selection
+        (chordpro-insert-chord (nth selection choices))))))
+
+(defun chordpro-mouse-choose-insert-chord (event)
+  "Insert a chord chosen from a dropdown menu that contains all chords
+already in the document."
+  (interactive "@e")
+    (when (featurep 'dropdown-list)
+    (let* ((choices (chordpro-buffer-chord-list))
+           (selection (dropdown-list choices)))
+      (when selection
+        (chordpro-insert-chord (nth selection choices))))))
+
+;;;This could be done more efficiently, but for most usages
+;;;it shouldn't be a problem to just scan the whole document each time
+(defun chordpro-buffer-chord-list ()
+  "Return a list of the chords currently used in the document."
+  (interactive)
+  (let ((chords nil))
+    (save-excursion
+      (save-match-data
+        (goto-char (point-min))
+        (while (re-search-forward chordpro-chord-regexp nil t)
+          (add-to-list 'chords (match-string 1)))))
+    (sort chords 'string<)))
+
+(defun chordpro-choose-replace-current-chord ()
+  "Replace the current chord with one chosen from a dropdown list"
+  (interactive)
+  (when (featurep 'dropdown-list)
+    (let* ((choices (chordpro-buffer-chord-list))
+           (selection (dropdown-list choices)))
+      (when selection
+        (chordpro-delete-current-chord)
+        (chordpro-insert-chord (nth selection choices))))))
 
 (defun chordpro-normalize-chord (chord)
   "Trim whitespace, capitalize first letter of chord."
   (capitalize (replace-regexp-in-string "\\s " "" chord)))
   
 (defvar chordpro-chord-regexp
-  "\\[[^][]*\\]"
+  "\\[\\([^][]*\\)\\]"
   "Regexp for matching a chord without regard for the point.")
 
 (defun chordpro-kill-next-chord ()
@@ -75,6 +121,11 @@ Special commands:
   "Kill the chord surrounding the point, if there is one."
   (interactive)
   (operate-on-current-chord 'kill-region))
+
+(defun chordpro-delete-current-chord ()
+  "Delete the chord surrounding the point, if there is one."
+  (interactive)
+  (operate-on-current-chord 'delete-region))
 
 (defun chordpro-copy-current-chord ()
   "Copy the chord surrounding the point, if there is one."
