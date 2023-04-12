@@ -1,5 +1,16 @@
 # Chordpro mode #
 
+## Notice ##
+
+It's been a while since I've had use for Chordpro, so my main motivation
+for this project has dried up.
+
+Joseph Turner has made a fork at
+https://git.sr.ht/~breatheoutbreathein/chordpro-mode.el/ with the idea
+of fixing some of the issues here, more actively maintaining this, and
+perhaps even adding more features, I don't know.  I recommend that you
+take a look at it if you are interested in this mode.
+
 ## Introduction ##
 
 This is an emacs major mode, derived from text-mode, for editing files
