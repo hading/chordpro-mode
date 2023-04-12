@@ -9,7 +9,8 @@
      ("\\({[^}]*}\\)" . font-lock-variable-name-face))))
 
 (defvar chordpro-file-encoding 'latin-1)
-       
+ 
+;;;###autoload
 (define-derived-mode chordpro-mode text-mode "Chordpro"
   "Major mode for editing Chordpro files.
 Special commands:
